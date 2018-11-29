@@ -2,8 +2,8 @@
 # include <stdio.h> 
 #include <unistd.h> /* for sleep() */
 #include <curses.h>
-#include <player.h>
-#include <pacman.h>
+#include  "player.h"
+#include "pacman.h"
 
 char playerToken = '<';
 
@@ -120,8 +120,7 @@ int main(int argc, char *argv[]) {
 		}
 		mvaddch(win.starty, win.startx, playerToken);
 		move(win.starty, win.startx);
-		board[win.starty][win.startx] = 0; //<------------------ will be used 
-for scoring purposes
+		board[win.starty][win.startx] = 0; //<------------------ will be used for scoring purposes
 	}
 	endwin(); /* End curses mode */
 	return 0;
