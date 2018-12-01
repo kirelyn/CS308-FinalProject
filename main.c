@@ -8,6 +8,8 @@
 //make it into an enumeration with three options
 char playerToken = '<';
 
+int score = 0;
+
 int board[25][26] = {
          {32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32},
          {32, 2, 1, 1, 1, 1, 1,32, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,32, 1, 1, 1, 1, 1, 2,32},
@@ -40,6 +42,7 @@ void init_win_params(PAC *p_win);
 void print_win_params(PAC *p_win);
 void makeBoard();
 void Movement(PAC win, int ch);
+void nextSquare(PAC *win, int y, int x);
 
 int main(int argc, char *argv[]) {
 	PAC win;
@@ -55,63 +58,17 @@ int main(int argc, char *argv[]) {
 
 	//Printing the board
 	makeBoard();
-/*	for(int i = 0; i < 25; i++){
-		for(int j = 0; j < 26; j++){
-			if(board[i][j] == 32){
-				addch('X');
-			}
-			else if(board[i][j] == 1){
-				addch('*');
-			}
-			else{
-				addch('#');
-			}
-			refresh();
-		}
-		printw("\n");
-	}*/
+
 	refresh();
 
 	Movement(win, ch);
-	//Movement
-/*	mvaddch(win.starty, win.startx, playerToken);
-	move(win.starty, win.startx);
-	while((ch = getch()) != KEY_BACKSPACE)
-	{
-		mvaddch(win.starty, win.startx, ' ');
-		switch(ch)
-		{
-			case KEY_LEFT:
-				if(board[win.starty][win.startx - 1] != 32){
-					--win.startx;
-					//increment score
-				}
-				break;
-			case KEY_RIGHT:
-				if(board[win.starty][win.startx + 1] != 32){
-					++win.startx;
-				}
-				break;
-			case KEY_UP:
-				if(board[win.starty - 1][win.startx] != 32){
-					--win.starty;
-				}
-				break;
-			case KEY_DOWN:
-				if(board[win.starty + 1][win.startx] != 32){
-					++win.starty;
-				}
-				break;
-		}
-		mvaddch(win.starty, win.startx, playerToken);
-		move(win.starty, win.startx);
-		board[win.starty][win.startx] = 0; //<------------------ will be used for scoring purposes
-	}*/
+
 	endwin(); /* End curses mode */
 	return 0;
 }
 
 void makeBoard(){
+	printw("Score: %d\n\n", score);
 	for(int i = 0; i < 25; i++){
                 for(int j = 0; j < 26; j++){
                         if(board[i][j] == 32){
@@ -134,29 +91,21 @@ void Movement(PAC win, int ch){
         move(win.starty, win.startx);
         while((ch = getch()) != KEY_BACKSPACE)
         {
+	mvaddstr(1,1,"1");
                 mvaddch(win.starty, win.startx, ' ');
                 switch(ch)
                 {
                         case KEY_LEFT:
-                                if(board[win.starty][win.startx - 1] != 32){
-                                        --win.startx;
-                                        //increment score
-                                }
-                                break;
+				nextSquare(&win, 0, -1);
+				break;
                         case KEY_RIGHT:
-                                if(board[win.starty][win.startx + 1] != 32){
-                                        ++win.startx;
-                                }
+                               nextSquare(&win, 0, 1);
                                 break;
                         case KEY_UP:
-                                if(board[win.starty - 1][win.startx] != 32){
-                                        --win.starty;
-                                }
+				nextSquare(&win, -1, 0);
                                 break;
                         case KEY_DOWN:
-                                if(board[win.starty + 1][win.startx] != 32){
-                                        ++win.starty;
-                                }
+				nextSquare(&win, 1, 0);
                                 break;
                 }
                 mvaddch(win.starty, win.startx, playerToken);
@@ -165,7 +114,35 @@ void Movement(PAC win, int ch){
 	}
 }
 
+void nextSquare(PAC *win, int y, int x){
+	mvaddstr(1, 1, "a");
+	char next = mvinch(win->starty + y, win->startx + x) & A_CHARTEXT;
+	mvaddstr(1, 1, "b");
+
+	switch(next){
+		case 'X':
+			break;
+		case '#':
+			score += 40;
+		case '*':
+			score += 10;
+		case ' ':
+
+			win->starty += y;
+	mvaddstr(1,1,"c");
+			win->startx += x;
+	mvaddstr(1,1,"d");
+			char points[6];
+			sprintf(points, "%d", score);
+			mvaddstr(0, 7, points);
+	mvaddstr(1,1,"e");
+			break;
+		default:
+			break;
+	}
+}
+
 void init_win_params(PAC *p_win) {
-	p_win->starty = 19;	//<------------------ this is how you determine where it starts
+	p_win->starty = 21;	//<------------------ this is how you determine where it starts
 	p_win->startx = 13;
 }
