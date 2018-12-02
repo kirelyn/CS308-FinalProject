@@ -34,7 +34,7 @@ int board[25][26] = {
          {32, 1,32,32,32, 1,32,32,32,32,32, 1,32,32, 1,32,32,32,32,32, 1,32,32,32, 1,32},
          {32, 1,32,32,32, 1,32,32, 1, 1, 1, 1,32,32, 1, 1, 1, 1,32,32, 1,32,32,32, 1,32},
          {32, 1,32,32,32, 1,32,32, 1,32,32,32,32,32,32,32,32, 1,32,32, 1,32,32,32, 1,32},
-         {32, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,32},
+         {32, 2, 1 , 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,32},
          {32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32},
 };
 
@@ -79,6 +79,7 @@ void makeBoard(){
                         }
                         else{
                                 addch('#');
+
                         }
                         refresh();
                 }
@@ -110,7 +111,7 @@ void Movement(PAC win, int ch){
                 }
                 mvaddch(win.starty, win.startx, playerToken);
                 move(win.starty, win.startx);
-		board[win.starty][win.startx] = 0;
+		//board[win.starty][win.startx] = 0; this line breaks the left corner
 	}
 }
 
@@ -124,8 +125,10 @@ void nextSquare(PAC *win, int y, int x){
 			break;
 		case '#':
 			score += 40;
+
 		case '*':
 			score += 10;
+
 		case ' ':
 
 			win->starty += y;
