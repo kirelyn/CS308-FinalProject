@@ -113,14 +113,16 @@ void makeBoard(){
 
 void Movement(PAC win, int ch, GHOST *g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
 	mvaddch(g1->y, g1->x, ghostToken);
-	mvaddch(g2->y, g2->x, ghostToken);
-	mvaddch(g3->y, g3->x, ghostToken);
-	mvaddch(g4->y, g4->x, ghostToken);
+	//mvaddch(g2->y, g2->x, ghostToken);
+	//mvaddch(g3->y, g3->x, ghostToken);
+	//mvaddch(g4->y, g4->x, ghostToken);
         move(win.starty, win.startx);
+	move(g1->y, g1->x);
         while((ch = getch()) != KEY_BACKSPACE && score != 2750) //2750 will be the max score possible
         {
                 mvaddch(win.starty, win.startx, ' ');
-                switch(ch)
+		mvaddch(g1->y, g1->x, ' ');
+		switch(ch)
                 {
                         case KEY_LEFT:
 				nextSquare(&win, 0, -1);
@@ -136,7 +138,9 @@ void Movement(PAC win, int ch, GHOST *g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
 				break;
                 }
                 mvaddch(win.starty, win.startx, playerToken);
+		mvaddch(g1->y, g1->x, ghostToken);
                 move(win.starty, win.startx);
+		move(g1->y, g1->x);
 		ghostBehavior(&g1, &win);
 		ghostBehavior(&g2, &win);
 		ghostBehavior(&g3, &win);
@@ -175,17 +179,19 @@ void nextGhost(GHOST *g, int y, int x){
         switch(next){
                 case 'X':
                         break;
-                case '#':
-         
+                case '#': 
+			//mvprintw(g->y, g->x, ' ');
+			//mvprintw(g->y, g->x, '+');
+			mvaddch( g->y, g->x, ' ');
 
                 case '*':
-                        
-
+			//mvprintw(g->y, g->x, ' ');
+			//mvprintw(g->y, g->x, '+');
+			mvaddch(g->y, g->x, ' ');
                 case ' ':
-
+		       //mvprintw(g->y, g->x, '+');
                        g->y += y;
-                       g->x += x;
-                        
+                       g->x += x; 
                 default:
                         break;
         }
@@ -354,25 +360,30 @@ void ghostBehavior(GHOST *g, PAC *win){
 	if (g->ghostNum == 1){
 		y = yBlinky(win->starty, win->startx, g->y, g->x);
 		x = xBlinky(win->starty, win->startx, g->y, g->x);
-		wmove(&g, y, x);
+		//wmove(&g, y, x);
+		 char next = mvinch(win->starty + y, win->startx + x) & A_CHARTEXT;
 	}
 	else if(g->ghostNum == 2){
 		y = yPinky(win->starty, win->startx, g->y, g->x);
 		x = xPinky(win->starty, win->startx, g->y, g->x);
-                wmove(&g, y, x);
+                //wmove(&g, y, x);
+		 char next = mvinch(win->starty + y, win->startx + x) & A_CHARTEXT;
 
 	}
 	else if(g->ghostNum == 3){
 		y = yInky(win->starty, win->startx, g->y, g->x);
                 x = xInky(win->starty, win->startx, g->y, g->x);
-                wmove(&g, y, x);
-
+                //wmove(&g, y, x);
+		 char next = mvinch(win->starty + y, win->startx + x) & A_CHARTEXT;
+		
 
 	}
 	else {
 		y = yClyde( g->y, g->x);
 		x = xClyde( g->y, g->x);
-		wmove(&g,  y, x);
+		//wmove(&g,  y, x);
+		 char next = mvinch(win->starty + y, win->startx + x) & A_CHARTEXT; 
+
 		}
 	
 }
