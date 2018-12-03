@@ -46,7 +46,7 @@ void print_win_params(PAC *p_win);
 void makeBoard();
 void Movement(PAC win, int ch, GHOST *g1, GHOST *g2, GHOST *g3, GHOST *g4);
 void nextSquare(PAC *win, int y, int x);
-void startScreen();
+int startScreen();
 void endScreen();
 void scoreScreen(char c[]);
 void debug();
@@ -77,21 +77,23 @@ int main(int argc, char *argv[]) {
 	setGhosts(&g3, 3, 4);
 	setGhosts(&g4, 3, 5);
 
-	startScreen();
+	int keepPlaying = startScreen(); //if keepPlaying == 1, the user selected Start Game
+					//else, the user wanted to exit
 
-	//Printing the board
-	makeBoard();
-
-	Movement(win, ch, &g1, &g2, &g3, &g4);
-
-	//print score- will be once they've eaten all the dots
-	endScreen();
-
-	endwin(); /* End curses mode */
-	return 0;
+	if(keepPlaying == 1){
+		//Printing the board
+		makeBoard();
+		Movement(win, ch, &g1, &g2, &g3, &g4);
+		endScreen();
+	}
+	else{
+		endwin(); /* End curses mode */
+		return 0;
+	}
 }
 
 void makeBoard(){
+	move(0,0);
 	printw("Score: %d\n\n", score);
 	for(int i = 0; i < 25; i++){
                 for(int j = 0; j < 26; j++){
@@ -193,7 +195,7 @@ void nextGhost(GHOST *g, int y, int x){
 }
 
 
-void startScreen(){
+int startScreen(){
 	system("clear");
 
 	move(0,0);
@@ -201,11 +203,6 @@ void startScreen(){
 
 	mvaddstr(3, 1, "Start Game");
 	mvaddstr(4, 1, "End Game");
-	//two options : start game or quit
-	//these will be between up/down arrow keys
-	//start game takes them to the actual board and they play (duh)
-	//quit will exit the entire program
-
 	move(10, 0);
 	printw("Created by: Kennedy Griffin and Kassidy Zeiler");
 
@@ -232,20 +229,19 @@ void startScreen(){
 	if(position == 3){
 		//start the game
 		system("clear");
-		return;
+		return 1;
 	}
 	else{
 		//exit the program
-//		exit(0);
+		return 0;
 	}
 }
 
 void endScreen(){
-	//clears the screen
 	system("clear");
 
 	move(0,0);
-	printw("Please enter your initials and hit the Backspace key when finished:  ");
+	printw("Please enter your initials and hit Backspace when finished:  ");
 	char letters[3] = {'A', 'A', 'A'};
 	int ch;
 	int position = 0;
@@ -287,7 +283,6 @@ void endScreen(){
 
 		move(1, position + 7);
 	}while((ch = getch()) != KEY_BACKSPACE);
-startScreen(); //for testing
 
 	scoreScreen(letters);
 	startScreen();
@@ -307,7 +302,7 @@ void scoreScreen(char c[]){
 	int counter = 0;
 debug();
 	while(fscanf(file, "%s %d", n, &points) != EOF){
-		strncpy(p[counter].name, n, 3);
+		strncpy(p[counter].name, n, 3); // <-----------------need to fix and in the loop below
 	//	p[counter].name = n;
 		p[counter].score = points;
 		counter++;
@@ -341,7 +336,7 @@ debug();
 
 }
 
-void debug(){
+void debug(){ // for testing purposes and will be removed before final code is submitted
 	while(getch() != KEY_BACKSPACE){
 
 	}
