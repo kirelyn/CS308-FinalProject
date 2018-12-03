@@ -68,16 +68,19 @@ int main(int argc, char *argv[]) {
 	keypad(stdscr, TRUE);
 	noecho();
 	init_pair(1, COLOR_CYAN, COLOR_BLACK);
+
 	/* Initialize the window parameters */
 	init_pac(&win);
+
 	setGhosts(&g1, 3, 2);
 	setGhosts(&g2, 3, 3);
 	setGhosts(&g3, 3, 4);
 	setGhosts(&g4, 3, 5);
+
+	startScreen();
+
 	//Printing the board
 	makeBoard();
-
-	refresh();
 
 	Movement(win, ch, &g1, &g2, &g3, &g4);
 
@@ -106,6 +109,7 @@ void makeBoard(){
                 }
                 printw("\n");
         }
+	refresh();
 }
 
 void Movement(PAC win, int ch, GHOST *g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
@@ -227,9 +231,12 @@ void startScreen(){
 	}
 	if(position == 3){
 		//start the game
+		system("clear");
+		return;
 	}
 	else{
 		//exit the program
+//		exit(0);
 	}
 }
 
