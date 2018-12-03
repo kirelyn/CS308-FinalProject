@@ -5,4 +5,5 @@ typedef struct ghost
 {
 	int x;
 	int y;
+	int ghostNum;
 }GHOST;

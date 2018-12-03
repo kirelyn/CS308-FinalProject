@@ -4,10 +4,11 @@
 #include <curses.h>
 #include  "player.h"
 #include "pacman.h"
-
+#include "ghost.h"
+//#include "ghost.c"
 //make it into an enumeration with three options
 char playerToken = '<';
-
+char ghostToken = '+';
 int score = 0;
 
 int board[25][26] = {
@@ -46,6 +47,14 @@ void nextSquare(PAC *win, int y, int x);
 
 int main(int argc, char *argv[]) {
 	PAC win;
+	GHOST g1;
+	g1.ghostNum = 1;
+	GHOST  g2;
+	g2.ghostNum = 2;
+	GHOST g3;
+	g3.ghostNum = 3;
+	GHOST g4;
+	g4.ghostNum = 4;
 	int ch;
 	initscr();
 	start_color();
@@ -62,6 +71,7 @@ int main(int argc, char *argv[]) {
 	refresh();
 
 	Movement(win, ch);
+	ghostBehavior(win, g1);
 
 	endwin(); /* End curses mode */
 	return 0;
@@ -149,3 +159,27 @@ void init_win_params(PAC *p_win) {
 	p_win->starty = 21;	//<------------------ this is how you determine where it starts
 	p_win->startx = 13;
 }
+
+void ghostBehavior(GHOST *g, PAC *win){
+	if (g->ghostNum == 1){
+		blinky(win->starty, win->startx, g->y, g->x);
+		char next = mvinch(g->y,g->x) & A_CHARTEXT;
+		wmove(win, g->y, g->x);
+	}
+	else if(g->ghostNum == 2){
+		pinky(win->starty, win->startx, g->y, g->x);
+		char next = mvinch(g->y,g->x) & A_CHARTEXT;
+	}
+	else if(g->ghostNum == 3){
+		 inky(win->starty, win->startx, g->y, g->x);
+		char next = mvinch(g->y, g->x) & A_CHARTEXT;
+
+	}
+	else {
+		clyde( g->y, g->x);
+		char next = mvinch(g->y, g->x) & A_CHARTEXT;
+
+	}
+	
+}
+

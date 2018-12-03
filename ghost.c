@@ -3,7 +3,7 @@
 #include <unistd.h> /* for sleep() */
 #include <curses.h>
 
-int * blinky(int pacY, int pacX, int currY, int currX){
+void blinky(int pacY, int pacX, int currY, int currX){
         int y = 0;
         int x = 0;
         int yx[3];
@@ -25,14 +25,12 @@ int * blinky(int pacY, int pacX, int currY, int currX){
         else{
                 x = currX;
         }
-       yx[0] = y;
-       yx[1] = x;
-	return yx;
+      
 }
 
 
 
-int * pinky(int pacY, int pacX, int currY, int currX){
+void pinky(int pacY, int pacX, int currY, int currX){
 	int y = 0;
 	int x = 0;
 	int yx[3];
@@ -54,13 +52,11 @@ int * pinky(int pacY, int pacX, int currY, int currX){
                         x = currX ++;
                 }
 	}
-	yx[0] = y;
-	yx[1] = x;
-	return yx;
+	
 }
 
 
-int * inky(int pacY, int pacX, int currY, int currX){
+void inky(int pacY, int pacX, int currY, int currX){
         int y = 0;
         int x = 0;
         int yx[3];
@@ -76,12 +72,10 @@ int * inky(int pacY, int pacX, int currY, int currX){
 	if( pacX <= currX){
 		x = currX++;
 	}
-	yx[0] = y;
-        yx[1] = x;
-        return yx;
+	
 }
 
-int * clyde(int currY, int currX){
+void clyde(int currY, int currX){
 int nMax = 4;
 int nMin = 1;
 int yx[3];
@@ -104,9 +98,6 @@ else if(nRandomNumber == 3){
 else{
 	currY--;
 	currX--;
-}
-yx[0] = currY;
-yx[1] = currX;
-return yx;
+	}
 }
 
