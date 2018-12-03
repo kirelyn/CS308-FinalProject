@@ -77,17 +77,14 @@ int main(int argc, char *argv[]) {
 	setGhosts(&g3, 3, 4);
 	setGhosts(&g4, 3, 5);
 
-	int keepPlaying = startScreen(); //if keepPlaying == 1, the user selected Start Game
-					//else, the user wanted to exit
-
-	if(keepPlaying == 1){
-		//Printing the board
+	int keepPlaying = startScreen();
+	if(keepPlaying == 1){ //user selected Start Game
 		makeBoard();
 		Movement(win, ch, &g1, &g2, &g3, &g4);
 		endScreen();
 	}
-	else{
-		endwin(); /* End curses mode */
+	else{ //user selected End Game
+		endwin();
 		return 0;
 	}
 }
@@ -226,21 +223,19 @@ int startScreen(){
 		}
 		move(position,0);
 	}
-	if(position == 3){
-		//start the game
+	if(position == 3){ //user selects Start Game
 		system("clear");
 		return 1;
 	}
-	else{
-		//exit the program
+	else{ //user selects End Game
 		return 0;
 	}
 }
 
 void endScreen(){
 	system("clear");
-
 	move(0,0);
+
 	printw("Please enter your initials and hit Backspace when finished:  ");
 	char letters[3] = {'A', 'A', 'A'};
 	int ch;
