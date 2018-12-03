@@ -40,9 +40,10 @@ int board[25][26] = {
 };
 
 void init_pac(PAC *p_win);
+void setGhosts(GHOST *g, int y, int x);
 void print_win_params(PAC *p_win);
 void makeBoard();
-void Movement(PAC win, int ch);
+void Movement(PAC win, int ch, GHOST *g1, GHOST *g2, GHOST *g3, GHOST *g4);
 void nextSquare(PAC *win, int y, int x);
 void startScreen();
 void endScreen();
@@ -68,15 +69,18 @@ int main(int argc, char *argv[]) {
 	init_pair(1, COLOR_CYAN, COLOR_BLACK);
 	/* Initialize the window parameters */
 	init_pac(&win);
-
+	setGhosts(&g1, 3, 2);
+	setGhosts(&g2, 3, 3);
+	setGhosts(&g3, 3, 4);
+	setGhosts(&g4, 3, 5);
 	//Printing the board
 	makeBoard();
 
 	refresh();
 
-	Movement(win, ch);
-	ghostBehavior(win, g1);
-
+	Movement(win, ch, &g1, &g2, &g3, &g4);
+	
+	
 	//print score- will be once they've eaten all the dots
 	endScreen();
 
@@ -104,8 +108,11 @@ void makeBoard(){
         }
 }
 
-void Movement(PAC win, int ch){
-	mvaddch(win.starty, win.startx, playerToken);
+void Movement(PAC win, int ch, GHOST *g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
+	mvaddch(g1->y, g1->x, ghostToken);
+	mvaddch(g2->y, g2->x, ghostToken);
+	mvaddch(g3->y, g3->x, ghostToken);
+	mvaddch(g4->y, g4->x, ghostToken);
         move(win.starty, win.startx);
         while((ch = getch()) != KEY_BACKSPACE && score != 2750) //2750 will be the max score possible
         {
@@ -123,10 +130,14 @@ void Movement(PAC win, int ch){
                                 break;
                         case KEY_DOWN:
 				nextSquare(&win, 1, 0);
-                                break;
+				break;
                 }
                 mvaddch(win.starty, win.startx, playerToken);
                 move(win.starty, win.startx);
+		ghostBehavior(&g1, &win);
+		ghostBehavior(&g2, &win);
+		ghostBehavior(&g3, &win);
+		ghostBehavior(&g4, &win);
 	}
 }
 
@@ -154,6 +165,29 @@ void nextSquare(PAC *win, int y, int x){
 			break;
 	}
 }
+
+void nextGhost(GHOST *g, int y, int x){
+        char next = mvinch(g->y + y, g->x + x) & A_CHARTEXT;
+
+        switch(next){
+                case 'X':
+                        break;
+                case '#':
+                       
+
+                case '*':
+                        
+
+                case ' ':
+
+                       g->y += y;
+                       g->x += x;
+                        
+                default:
+                        break;
+        }
+}
+
 
 void startScreen(){
 	system("clear");
@@ -252,7 +286,7 @@ void scoreScreen(char c[]){
 		int rank = i + 1;
 		printw("%d. %s \t %d\n", rank, p[i].name, p[i].score);
 	}
-debug();
+
 }
 
 void init_pac(PAC *p_win) {
@@ -260,34 +294,40 @@ void init_pac(PAC *p_win) {
 	p_win->startx = 13;
 }
 
-<<<<<<< HEAD
+void setGhosts(GHOST *g, int y, int x){
+	g->y = y;
+	g->x = x;
+	
+}
 void ghostBehavior(GHOST *g, PAC *win){
+	int y = 0;
+	int x = 0;
+	//mvaddch(3, 2, ghostToken);
 	if (g->ghostNum == 1){
-		blinky(win->starty, win->startx, g->y, g->x);
-		char next = mvinch(g->y,g->x) & A_CHARTEXT;
-		wmove(win, g->y, g->x);
+		y = yBlinky(win->starty, win->startx, g->y, g->x);
+		x = xBlinky(win->starty, win->startx, g->y, g->x);
+		wmove(&g, y, x);
 	}
 	else if(g->ghostNum == 2){
-		pinky(win->starty, win->startx, g->y, g->x);
-		char next = mvinch(g->y,g->x) & A_CHARTEXT;
+		y = yPinky(win->starty, win->startx, g->y, g->x);
+		x = xPinky(win->starty, win->startx, g->y, g->x);
+                wmove(&g, y, x);
+
 	}
 	else if(g->ghostNum == 3){
-		 inky(win->starty, win->startx, g->y, g->x);
-		char next = mvinch(g->y, g->x) & A_CHARTEXT;
+		y = yInky(win->starty, win->startx, g->y, g->x);
+                x = xInky(win->starty, win->startx, g->y, g->x);
+                wmove(&g, y, x);
+
 
 	}
 	else {
-		clyde( g->y, g->x);
-		char next = mvinch(g->y, g->x) & A_CHARTEXT;
-
-	}
+		y = yClyde( g->y, g->x);
+		x = xClyde( g->y, g->x);
+		wmove(&g,  y, x);
+		}
 	
 }
 
-=======
-void debug(){
-	while(getch() != KEY_BACKSPACE){
 
-	}
-}
->>>>>>> 579d12881d31b3ac858d3437c2fd5ed0974c940d
+
