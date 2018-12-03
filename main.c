@@ -1,11 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h> /* for sleep() */
+#include <unistd.h>
 #include <curses.h>
 #include "player.h"
 #include "pacman.h"
 #include "ghost.h"
 //#include "ghost.c"
+
 //make it into an enumeration with three options
 char playerToken = '<';
 char ghostToken = '+';
@@ -79,8 +80,7 @@ int main(int argc, char *argv[]) {
 	refresh();
 
 	Movement(win, ch, &g1, &g2, &g3, &g4);
-	
-	
+
 	//print score- will be once they've eaten all the dots
 	endScreen();
 
@@ -173,7 +173,7 @@ void nextGhost(GHOST *g, int y, int x){
                 case 'X':
                         break;
                 case '#':
-                       
+         
 
                 case '*':
                         
@@ -192,6 +192,45 @@ void nextGhost(GHOST *g, int y, int x){
 void startScreen(){
 	system("clear");
 
+	move(0,0);
+	printw("Pac-Man \n \n");
+
+	mvaddstr(3, 1, "Start Game");
+	mvaddstr(4, 1, "End Game");
+	//two options : start game or quit
+	//these will be between up/down arrow keys
+	//start game takes them to the actual board and they play (duh)
+	//quit will exit the entire program
+
+	move(10, 0);
+	printw("Created by: Kennedy Griffin and Kassidy Zeiler");
+
+	move(3,0);
+	int ch;
+	int position = 3;
+	while((ch = getch()) != KEY_BACKSPACE){
+		switch(ch){
+			case KEY_UP:
+				if(position != 3){
+					position--;
+				}
+				break;
+			case KEY_DOWN:
+				if(position != 4){
+					position++;
+				}
+				break;
+			default:
+				break;
+		}
+		move(position,0);
+	}
+	if(position == 3){
+		//start the game
+	}
+	else{
+		//exit the program
+	}
 }
 
 void endScreen(){
@@ -199,7 +238,7 @@ void endScreen(){
 	system("clear");
 
 	move(0,0);
-	printw("Please enter your initials: ");
+	printw("Please enter your initials and hit the Backspace key when finished:  ");
 	char letters[3] = {'A', 'A', 'A'};
 	int ch;
 	int position = 0;
@@ -241,6 +280,7 @@ void endScreen(){
 
 		move(1, position + 7);
 	}while((ch = getch()) != KEY_BACKSPACE);
+startScreen(); //for testing
 
 	scoreScreen(letters);
 	startScreen();
@@ -249,44 +289,55 @@ void endScreen(){
 void scoreScreen(char c[]){
 	move(5,0);
 	FILE *file;
-	file = fopen("Test.txt", "a");
+	file = fopen("PastScores.txt", "a");
 	fprintf(file, "%s %d\n", c, score);
 	fclose(file);
 
 	char n[3];
 	int points;
 	PLAYER p[50];
-
-	file = fopen("Test.txt", "r");
+	file = fopen("PastScores.txt", "r");
 	int counter = 0;
-
+debug();
 	while(fscanf(file, "%s %d", n, &points) != EOF){
-		p[counter].name = n;
+		strncpy(p[counter].name, n, 3);
+	//	p[counter].name = n;
 		p[counter].score = points;
 		counter++;
 	}
+debug();
 
 	//Putting the array in descending order for easier printing
 	for(int i = 0; i < counter; i++){
 		for(int j = i + 1; j < counter; j++){
 			if(p[i].score < p[j].score){
-				char* tempN = p[i].name;
+				char* tempN; // = p[i].name;
+			strcpy(tempN, p[i].name);
 				int tempP = p[i].score;
-				p[i].name = p[j].name;
+			strcpy(p[i].name, p[j].name);
+			//	p[i].name = p[j].name;
 				p[i].score = p[j].score;
-				p[j].name = tempN;
+			strcpy(p[j].name, tempN);
+			//	p[j].name = &tempN;
 				p[j].score = tempP;
 			}
 		}
 	}
-
+debug();
 	//Print score to screen in order
 	for(int i = 0; i < 10 && i < counter; i++){
 
 		int rank = i + 1;
 		printw("%d. %s \t %d\n", rank, p[i].name, p[i].score);
 	}
+debug();
 
+}
+
+void debug(){
+	while(getch() != KEY_BACKSPACE){
+
+	}
 }
 
 void init_pac(PAC *p_win) {
