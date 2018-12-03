@@ -2,6 +2,6 @@
 #include <stdio.h>
 
 typedef struct Player{
-	char * name;
+	char* name;
 	int score;
 } PLAYER;
