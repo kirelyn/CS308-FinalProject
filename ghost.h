@@ -6,4 +6,5 @@ typedef struct ghost
 	int x;
 	int y;
 	int ghostNum;
+	char lastChar;
 }GHOST;
