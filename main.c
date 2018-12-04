@@ -45,7 +45,7 @@ boardToken board[25][26] = {
          {Wall,Points,Points,Points,Wall,Wall,Wall,Wall,Points,Wall,Wall,Wall,Wall,Wall,Wall,Wall,Wall,Points,Wall,Wall,Wall,Wall,Points,Points,Points,Wall},
          {Wall,Points,Points,Points,Wall,Wall,Wall,Wall,Points,Wall,Wall,Wall,Wall,Wall,Wall,Wall,Wall,Points,Wall,Wall,Wall,Wall,Points,Points,Points,Wall},
          {Wall,Wall,Wall,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Points,Wall,Wall,Wall},
-         {Wall,Wall,Wall,Points,Wall,Wall,Wall,Wall,Points,Wall,Wall,Wall,Wall,Wall,Wall,Barrier,Wall,Points,Wall,Wall,Wall,Wall,Points,Wall,Wall,Wall},
+         {Wall,Wall,Wall,Points,Wall,Wall,Wall,Wall,Points,Wall,Barrier,Barrier,Barrier,Barrier,Barrier,Barrier,Wall,Points,Wall,Wall,Wall,Wall,Points,Wall,Wall,Wall},
          {Wall,Wall,Wall,Points,Wall,Wall,Wall,Wall,Points,Wall,Empty,Empty,Inky,Empty,Blinky,Empty,Wall,Points,Wall,Wall,Wall,Wall,Points,Wall,Wall,Wall},
          {Wall,Wall,Wall,Points,Wall,Wall,Points,Points,Points,Wall,Empty,Clyde,Empty,Pinky,Empty,Empty,Wall,Points,Points,Points,Wall,Wall,Points,Wall,Wall,Wall},
          {Wall,Wall,Wall,Points,Wall,Wall,Points,Wall,Points,Wall,Wall,Wall,Wall,Wall,Wall,Wall,Wall,Points,Wall,Points,Wall,Wall,Points,Wall,Wall,Wall},
@@ -80,11 +80,11 @@ int main(int argc, char *argv[]) {
 	GHOST g1;
 	g1.ghostNum = 1;
 	GHOST  g2;
-	g2.ghostNum = 2;
+	g2.ghostNum = 1;
 	GHOST g3;
-	g3.ghostNum = 3;
+	g3.ghostNum =2 ;
 	GHOST g4;
-	g4.ghostNum = 4;
+	g4.ghostNum = 3;
 
 	int ch;
 
@@ -247,6 +247,7 @@ int  nextGhost(GHOST *g, PAC *win){
 		board[g->y+y][g->x+x] = 43;
 		board[g->y][g->x] = 42;
 	}*/
+	 
 	if(abs(g->y - win->starty) == 0 && abs(g->x - win->startx) == 1){
 		return 1;
 	}
@@ -259,7 +260,8 @@ int  nextGhost(GHOST *g, PAC *win){
 		//implement blinky
 		if(abs(win->starty - g->y) < abs(win->startx - g->x)){
 			//move y
-			if(win->starty >  g->y){
+			 char next = mvinch(g->y + 1, g->x + x) & A_CHARTEXT;
+			if(win->starty >  g->y && next != 'X' ){
 				y = 1;
 			}
 			else{
@@ -268,7 +270,8 @@ int  nextGhost(GHOST *g, PAC *win){
 		}
 		else{
 			//move x
-			if(win->startx > g->x){
+			 char next = mvinch(g->y + y, g->x + 1) & A_CHARTEXT;
+			if(win->startx > g->x && next != 'X'){
 				x=1;
 			}
 			else{
@@ -281,7 +284,8 @@ int  nextGhost(GHOST *g, PAC *win){
 		//implement pinky
 		 if(abs(win->starty - g->y) < abs(win->startx - g->x)){
                         //move x
-			if(win->startx > g->x){
+			char next = mvinch(g->y + y, g->x + 1) & A_CHARTEXT;
+			if(win->startx > g->x && next != 'X'){
                                 x=1;
                         }
                         else{
@@ -291,7 +295,8 @@ int  nextGhost(GHOST *g, PAC *win){
                 }
                 else{
                         //move y
-			if(win->starty >  g->y){
+			 char next = mvinch(g->y + 1, g->x + x) & A_CHARTEXT;
+			if(win->starty >  g->y && next != 'X'){
                                y=1;
                         }
                         else{
@@ -304,7 +309,8 @@ int  nextGhost(GHOST *g, PAC *win){
 		//implement inky
 		 if(abs(win->starty - g->y) < abs(win->startx - g->x)){
                         //move y
-			if(win->starty < 13){
+			 char next = mvinch(g->y + 1, g->x + x) & A_CHARTEXT;
+			if(win->starty < 13 && next != 'X'){
                                 y=1;
                         }
                         else{
@@ -314,7 +320,8 @@ int  nextGhost(GHOST *g, PAC *win){
                 }
                 else{
                         //move x
-			if(win->startx < 13){
+			char next = mvinch(g->y + y, g->x + 1) & A_CHARTEXT;
+			if(win->startx < 13 && next != 'X' ){
                                 x=1;
                         }
                         else{
@@ -326,7 +333,8 @@ int  nextGhost(GHOST *g, PAC *win){
 	else{
 		//implement clyde
 		if(g->y > win->starty){
-			if( g->y > g->x){
+			 char next = mvinch(g->y + 1, g->x + x) & A_CHARTEXT;
+			if( g->y > win->starty && next != 'X' ){
 				y = 1;
 			}
 			else{
@@ -335,7 +343,8 @@ int  nextGhost(GHOST *g, PAC *win){
 		}
 		else{
 			//move x
-			if(g->y > g->x){
+			 char next = mvinch(g->y + y, g->x + 1) & A_CHARTEXT;
+			if(win->startx < g->x && next != 'X' ){
 				x=1;
 			}
 			else{
