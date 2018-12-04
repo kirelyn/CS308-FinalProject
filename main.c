@@ -21,7 +21,7 @@ typedef enum boardToken{
 	Pinky = 43,
 	Clyde = 43,
 	Pacman = 60,
-	Wall = 219
+	Wall = 88
 }boardToken;
 
 typedef enum State{
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
 	GHOST  g2;
 	g2.ghostNum = 1;
 	GHOST g3;
-	g3.ghostNum =2 ;
+	g3.ghostNum = 2;
 	GHOST g4;
 	g4.ghostNum = 3;
 
@@ -99,6 +99,7 @@ int main(int argc, char *argv[]) {
 	setGhosts(&g2, 13, 12);
 	setGhosts(&g3, 14, 13);
 	setGhosts(&g4, 13, 14);
+
 	while(true){
 		switch(state){
 			case Start:
@@ -126,24 +127,24 @@ int main(int argc, char *argv[]) {
 
 void makeBoard(){
 	move(0,0);
-start_color();
-init_pair(1,COLOR_BLUE,COLOR_BLACK);
-init_pair(2,COLOR_YELLOW,COLOR_BLACK);
+	start_color();
+	init_pair(1,COLOR_BLUE,COLOR_BLACK);
+	init_pair(2,COLOR_YELLOW,COLOR_BLACK);
+	refresh();
 	printw("Score: %d\n\n", score);
 	for(int i = 0; i < 25; i++){
                 for(int j = 0; j < 26; j++){
 			boardToken bt = board[i][j];
-		switch(bt){
-			case Wall:
-				addch(bt | COLOR_PAIR(1));
-				break;
-			case Powerup:
-				addch(bt | COLOR_PAIR(2));
-				break;
-			default:
-				addch(bt);
-		}
-        	       	//addch(bt | COLOR_PAIR(bt));
+			switch(bt){
+				case Wall:
+					addch(bt | COLOR_PAIR(1));
+					break;
+				case Powerup:
+					addch(bt | COLOR_PAIR(2));
+					break;
+				default:
+					addch(bt);
+			}
 			refresh();
 		}
                 printw("\n");
@@ -161,7 +162,7 @@ void play(PAC win, int ch, GHOST * g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
 	score = 0;
         move(win.starty, win.startx);
 	int hasLost = 0;
-        while((ch = getch()) != KEY_BACKSPACE && score != 2750 && hasLost<1) //2750 will be the max score possible
+        while((ch = getch()) != KEY_BACKSPACE && score != 2750 && hasLost < 1) //2750 will be the max score possible
         {
                 mvaddch(win.starty, win.startx, ' ');
 		switch(ch)
@@ -260,7 +261,7 @@ int  nextGhost(GHOST *g, PAC *win){
 		//implement blinky
 		if(abs(win->starty - g->y) < abs(win->startx - g->x)){
 			//move y
-			 char next = mvinch(g->y + 1, g->x + x) & A_CHARTEXT;
+			char next = mvinch(g->y + 1, g->x + x) & A_CHARTEXT;
 			if(win->starty >  g->y && next != 'X' ){
 				y = 1;
 			}
@@ -270,7 +271,7 @@ int  nextGhost(GHOST *g, PAC *win){
 		}
 		else{
 			//move x
-			 char next = mvinch(g->y + y, g->x + 1) & A_CHARTEXT;
+			char next = mvinch(g->y + y, g->x + 1) & A_CHARTEXT;
 			if(win->startx > g->x && next != 'X'){
 				x=1;
 			}
@@ -278,6 +279,7 @@ int  nextGhost(GHOST *g, PAC *win){
 				x=-1;
 			}
 		}
+		//mvaddch(g->y, g->x, ghostToken);
 
 	}
 	else if(g->ghostNum == 2){
@@ -374,6 +376,7 @@ int  nextGhost(GHOST *g, PAC *win){
                 default:
                         break;
         }
+	//mvaddch(g->y, g->x, g);
 	return FALSE;
 }
 
@@ -419,6 +422,7 @@ void startScreen(){
 }
 
 void endScreen(){
+	clear();
 	system("clear");
 	move(0,0);
 
