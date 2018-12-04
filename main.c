@@ -46,6 +46,7 @@ void print_win_params(PAC *p_win);
 void makeBoard();
 void Movement(PAC win, int ch, GHOST *g1, GHOST *g2, GHOST *g3, GHOST *g4);
 void nextSquare(PAC *win, int y, int x);
+void nextGhost(GHOST *g, int y, int x);
 int startScreen();
 void endScreen();
 void scoreScreen(char c[]);
@@ -73,9 +74,9 @@ int main(int argc, char *argv[]) {
 	init_pac(&win);
 
 	setGhosts(&g1, 3, 2);
-	setGhosts(&g2, 3, 3);
-	setGhosts(&g3, 3, 4);
-	setGhosts(&g4, 3, 5);
+	//setGhosts(&g2, 3, 3);
+	//setGhosts(&g3, 3, 4);
+	//setGhosts(&g4, 3, 5);
 
 	int keepPlaying = startScreen();
 	if(keepPlaying == 1){ //user selected Start Game
@@ -113,11 +114,13 @@ void makeBoard(){
 
 void Movement(PAC win, int ch, GHOST *g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
 	mvaddch(g1->y, g1->x, ghostToken);
+	mvaddch(win.starty, win.startx, playerToken);
 	//mvaddch(g2->y, g2->x, ghostToken);
 	//mvaddch(g3->y, g3->x, ghostToken);
 	//mvaddch(g4->y, g4->x, ghostToken);
-        move(win.starty, win.startx);
-	move(g1->y, g1->x);
+        //move(&win, g1->y, g1->x);
+	move(win.starty, win.startx);
+	//wmove(&win, g1->y, g1->x);
         while((ch = getch()) != KEY_BACKSPACE && score != 2750) //2750 will be the max score possible
         {
                 mvaddch(win.starty, win.startx, ' ');
@@ -125,26 +128,31 @@ void Movement(PAC win, int ch, GHOST *g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
 		switch(ch)
                 {
                         case KEY_LEFT:
-				nextSquare(&win, 0, -1);
+				//nextSquare(&win, 0, -1);
+				nextGhost(&g1, 0, -1);
+				//mvaddch(g1->y, g1->x, ghostToken);
 				break;
                         case KEY_RIGHT:
                                 nextSquare(&win, 0, 1);
+				nextGhost(&g1, 0, 1);
                                 break;
                         case KEY_UP:
 				nextSquare(&win, -1, 0);
+				nextGhost(&g1, -1, 0);
                                 break;
                         case KEY_DOWN:
 				nextSquare(&win, 1, 0);
+				nextGhost(&g1, 1, 0);
 				break;
                 }
                 mvaddch(win.starty, win.startx, playerToken);
-		mvaddch(g1->y, g1->x, ghostToken);
-                move(win.starty, win.startx);
+                mvaddch(g1->y, g1->x, ghostToken);
+		move(win.starty, win.startx);
 		move(g1->y, g1->x);
-		ghostBehavior(&g1, &win);
+		/*ghostBehavior(&g1, &win);
 		ghostBehavior(&g2, &win);
 		ghostBehavior(&g3, &win);
-		ghostBehavior(&g4, &win);
+		ghostBehavior(&g4, &win);*/
 	}
 }
 
@@ -175,24 +183,26 @@ void nextSquare(PAC *win, int y, int x){
 
 void nextGhost(GHOST *g, int y, int x){
         char next = mvinch(g->y + y, g->x + x) & A_CHARTEXT;
-
         switch(next){
                 case 'X':
                         break;
                 case '#': 
 			//mvprintw(g->y, g->x, ' ');
 			//mvprintw(g->y, g->x, '+');
-			mvaddch( g->y, g->x, ' ');
+			//mvaddch( g->y, g->x, '#');
 
                 case '*':
 			//mvprintw(g->y, g->x, ' ');
 			//mvprintw(g->y, g->x, '+');
-			mvaddch(g->y, g->x, ' ');
+			//mvaddch(g->y, g->x, '*');
                 case ' ':
 		       //mvprintw(g->y, g->x, '+');
-                       g->y += y;
-                       g->x += x; 
+                       //g->y += y;
+                       //g->x += x;
+		       break; 
                 default:
+			g->y += y;
+			g->x += x;
                         break;
         }
 }
