@@ -168,7 +168,7 @@ void play(PAC win, int ch, GHOST *g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
                 mvaddch(win.starty, win.startx, playerToken);
 		mvaddch(g1->y, g1->x, ghostToken);
                 move(win.starty, win.startx);
-		move(g1->y, g1->x);
+		//move(g1->y, g1->x);
 		ghostBehavior(&g1, &win);
 		ghostBehavior(&g2, &win);
 		ghostBehavior(&g3, &win);
