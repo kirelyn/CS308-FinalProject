@@ -5,7 +5,6 @@
 #include "player.h"
 #include "pacman.h"
 #include "ghost.h"
-//#include "ghost.c"
 
 char playerToken = '<';
 char ghostToken = '+';
@@ -180,7 +179,6 @@ void play(PAC win, int ch, GHOST * g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
                                 hasLost += nextGhost(g2, &win);
 				hasLost += nextGhost(g3, &win);
 				hasLost += nextGhost(g4, &win);
-				//nextGhost(&g1, 0, 1);
                                 break;
                         case KEY_UP:
 				nextSquare(&win, -1, 0);
@@ -188,7 +186,6 @@ void play(PAC win, int ch, GHOST * g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
                                 hasLost += nextGhost(g2, &win);
 				hasLost += nextGhost(g3, &win);
 				hasLost += nextGhost(g4, &win);
-				//nextGhost(&g1, -1, 0);
                                 break;
                         case KEY_DOWN:
 				nextSquare(&win, 1, 0);
@@ -196,7 +193,6 @@ void play(PAC win, int ch, GHOST * g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
                                 hasLost += nextGhost(g2, &win);
 				hasLost += nextGhost(g3, &win);
 				hasLost += nextGhost(g4, &win);
-				//nextGhost(&g1, 1, 0);
 				break;
                 }
                 mvaddch(win.starty, win.startx, playerToken);
@@ -205,11 +201,6 @@ void play(PAC win, int ch, GHOST * g1, GHOST *g2, GHOST *g3, GHOST *g4 ){
 		mvaddch(g3->y, g3->x, ghostToken);
 		mvaddch(g4->y, g4->x, ghostToken);
                 move(win.starty, win.startx);
-		//move(g1->y, g1->x);
-		//ghostBehavior(&g1, &win);
-		//ghostBehavior(&g2, &win);
-		//ghostBehavior(&g3, &win);
-		//ghostBehavior(&g4, &win);
 	}
 	state = End;
 }
@@ -239,16 +230,7 @@ void nextSquare(PAC *win, int y, int x){
 	}
 }
 
-int  nextGhost(GHOST *g, PAC *win){
-	/*char nextSpotChar = board[14][14];
-	if(g->y < 0 || g->y > 26){
-		return;
-	}
-        if(board[g->y + y - 2][g-> x+ x] != 219){
-		board[g->y+y][g->x+x] = 43;
-		board[g->y][g->x] = 42;
-	}*/
-	 
+int  nextGhost(GHOST *g, PAC *win){ 
 	if(abs(g->y - win->starty) == 0 && abs(g->x - win->startx) == 1){
 		return 1;
 	}
@@ -279,7 +261,6 @@ int  nextGhost(GHOST *g, PAC *win){
 				x=-1;
 			}
 		}
-		//mvaddch(g->y, g->x, ghostToken);
 
 	}
 	else if(g->ghostNum == 2){
@@ -536,40 +517,7 @@ void setGhosts(GHOST *g, int y, int x){
 	g->x = x;
 	g->lastChar = ' ';
 }
-void ghostBehavior(GHOST *g, PAC *win){
-	int y = 0;
-	int x = 0;
-	//mvaddch(3, 2, ghostToken);
-	if (g->ghostNum == 1){
-		y = yBlinky(win->starty, win->startx, g->y, g->x);
-		x = xBlinky(win->starty, win->startx, g->y, g->x);
-		//wmove(&g, y, x);
-		 char next = mvinch(win->starty + y, win->startx + x) & A_CHARTEXT;
-	}
-	else if(g->ghostNum == 2){
-		y = yPinky(win->starty, win->startx, g->y, g->x);
-		x = xPinky(win->starty, win->startx, g->y, g->x);
-                //wmove(&g, y, x);
-		 char next = mvinch(win->starty + y, win->startx + x) & A_CHARTEXT;
 
-	}
-	else if(g->ghostNum == 3){
-		y = yInky(win->starty, win->startx, g->y, g->x);
-                x = xInky(win->starty, win->startx, g->y, g->x);
-                //wmove(&g, y, x);
-		 char next = mvinch(win->starty + y, win->startx + x) & A_CHARTEXT;
-		
-
-	}
-	else {
-		y = yClyde( g->y, g->x);
-		x = xClyde( g->y, g->x);
-		//wmove(&g,  y, x);
-		 char next = mvinch(win->starty + y, win->startx + x) & A_CHARTEXT; 
-
-		}
-	
-}
 
 
 
