@@ -124,11 +124,24 @@ int main(int argc, char *argv[]) {
 
 void makeBoard(){
 	move(0,0);
+start_color();
+init_pair(1,COLOR_BLUE,COLOR_BLACK);
+init_pair(2,COLOR_YELLOW,COLOR_BLACK);
 	printw("Score: %d\n\n", score);
 	for(int i = 0; i < 25; i++){
                 for(int j = 0; j < 26; j++){
 			boardToken bt = board[i][j];
-        	       	addch(bt);
+		switch(bt){
+			case Wall:
+				addch(bt | COLOR_PAIR(1));
+				break;
+			case Powerup:
+				addch(bt | COLOR_PAIR(2));
+				break;
+			default:
+				addch(bt);
+		}
+        	       	//addch(bt | COLOR_PAIR(bt));
 			refresh();
 		}
                 printw("\n");
