@@ -303,8 +303,8 @@ void scoreScreen(char c[]){
 	int counter = 0;
 debug();
 	while(fscanf(file, "%s %d", n, &points) != EOF){
-		strncpy(p[counter].name, n, 3); // <-----------------need to fix and in the loop below
-	//	p[counter].name = n;
+		//strncpy(p[counter].name, n, 3); // <-----------------need to fix and in the loop below
+		p[counter].name = n;
 		p[counter].score = points;
 		counter++;
 	}
@@ -314,14 +314,14 @@ debug();
 	for(int i = 0; i < counter; i++){
 		for(int j = i + 1; j < counter; j++){
 			if(p[i].score < p[j].score){
-				char* tempN; // = p[i].name;
-			strcpy(tempN, p[i].name);
+				char* tempN = p[i].name;
+			//strcpy(tempN, p[i].name);
 				int tempP = p[i].score;
-			strcpy(p[i].name, p[j].name);
-			//	p[i].name = p[j].name;
+			//strcpy(p[i].name, p[j].name);
+				p[i].name = p[j].name;
 				p[i].score = p[j].score;
-			strcpy(p[j].name, tempN);
-			//	p[j].name = &tempN;
+			//strcpy(p[j].name, tempN);
+				p[j].name = &tempN;
 				p[j].score = tempP;
 			}
 		}

@@ -1,6 +1,7 @@
 DAA 20
 CDE 10
 CAB 2720
+<<<<<<< HEAD
 AAA 850
 AAA 360
 AAA 270
@@ -8,3 +9,7 @@ AAA 350
 AAA 370
 AAA 360
 AAA 140
+=======
+BBB 130
+EEE 80
+>>>>>>> 7729363... Trying to do a seperate branch to avoid merge conflicts
